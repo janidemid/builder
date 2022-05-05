@@ -17,4 +17,8 @@ public class Order {
         this.dessert = dessert;
         this.drink = drink;
     }
+
+    public Order(Snack snack){
+        this.snack=snack;
+    }
 }

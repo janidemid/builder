@@ -1,5 +1,6 @@
 package main;
 
+import dish.builders.BurgerBuilder;
 import dish.builders.OrderBuilder;
 import dish.builders.PizzaBuilder;
 import dish.dessert.Cake;
@@ -7,6 +8,7 @@ import dish.drink.FruitFresh;
 import dish.first_dish.Soup;
 import dish.ingredient.Ingredient;
 import dish.ingredient.IngredientType;
+import dish.second_dish.Burger;
 import dish.second_dish.Macaroni;
 import dish.second_dish.Pizza;
 import dish.snack.CheeseSticks;
@@ -23,7 +25,7 @@ import java.util.stream.Collectors;
 
 public class Aplication {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Order order = new OrderBuilder()
                 .addSnack(new CheeseSticks())
                 .addDesert(new Cake()).build();
@@ -36,6 +38,8 @@ public class Aplication {
 
         Pizza pizza =makePizza();
         System.out.println(pizza);
+        Burger burger = makeBurger();
+        System.out.println(burger);
     }
 
     public static Pizza makePizza() {
@@ -87,5 +91,35 @@ public class Aplication {
         }
 
         return pizzaBuilder.build();
+    }
+
+    public static Burger makeBurger() throws IOException {
+        BurgerBuilder burgerBuilder = new BurgerBuilder();
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
+        System.out.println("здравствуйте!");
+        System.out.println("Выберите название для бургера");
+
+        String name = reader.readLine();
+        burgerBuilder.setName(name);
+        try {
+            System.out.println("добавьте иенредиент: \n"
+                    + Arrays.stream(IngredientType.values()).map(ingredientType -> ingredientType.getId() + " - " + ingredientType.getRuName())
+                    .collect(Collectors.joining(", ")));
+            System.out.println("Введите \" зватит \" для завершения выбора ингредиентов");
+            String answer;
+            while (!((answer = reader.readLine()).equals("хватит"))) {
+                Ingredient ingredient = new Ingredient(
+                        IngredientType.getById(Integer.parseInt(answer)),
+                        "our supplier",
+                        LocalDateTime.now(),
+                        LocalDateTime.MAX);
+                burgerBuilder.addIngredient(ingredient);
+            }
+        } catch (IOException e) {
+            System.out.println("При выборе инридиентов для пиццы возникла ошибка!");
+        }
+        return burgerBuilder.build();
     }
 }

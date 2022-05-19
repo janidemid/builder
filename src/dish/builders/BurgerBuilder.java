@@ -18,11 +18,11 @@ public class BurgerBuilder {
         this.name=name;
         return this;
     }
-    public BurgerBuilder addIngrediant(Ingredient ingredient){
-        this.ingredients.remove(ingredient);
+    public BurgerBuilder addIngredient(Ingredient ingredient){
+        this.ingredients.add(ingredient);
         return this;
     }
-    public BurgerBuilder resetIngrediants(){
+    public BurgerBuilder resetIngredients(){
         ingredients = new ArrayList<>();
         return this;
     }
